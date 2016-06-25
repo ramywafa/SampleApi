@@ -1,0 +1,2 @@
+# SampleApi
+Rails API application
