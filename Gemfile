@@ -10,6 +10,7 @@ gem 'jquery-rails'
 gem 'jbuilder', '~> 2.0'
 gem 'devise'
 gem 'rabl-rails'
+gem 'annotate'
 
 group :development, :test do
 	gem 'better_errors'
