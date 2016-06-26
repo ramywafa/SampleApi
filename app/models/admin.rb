@@ -29,4 +29,5 @@ class Admin < ActiveRecord::Base
          :recoverable, :rememberable, :trackable, :validatable
 
   has_many :dishes, as: :creator, dependent: :destroy
+  has_many :reviews, as: :reviewer, dependent: :destroy
 end

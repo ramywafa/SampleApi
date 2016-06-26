@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160626013931) do
+ActiveRecord::Schema.define(version: 20160626015609) do
 
   create_table "admins", force: :cascade do |t|
     t.string   "email",                  limit: 255, default: "", null: false
@@ -41,6 +41,17 @@ ActiveRecord::Schema.define(version: 20160626013931) do
   end
 
   add_index "dishes", ["creator_type", "creator_id"], name: "index_dishes_on_creator_type_and_creator_id", using: :btree
+
+  create_table "reviews", force: :cascade do |t|
+    t.integer  "reviewer_id",   limit: 4
+    t.string   "reviewer_type", limit: 255
+    t.integer  "rating",        limit: 4
+    t.text     "content",       limit: 65535
+    t.datetime "created_at",                  null: false
+    t.datetime "updated_at",                  null: false
+  end
+
+  add_index "reviews", ["reviewer_type", "reviewer_id"], name: "index_reviews_on_reviewer_type_and_reviewer_id", using: :btree
 
   create_table "users", force: :cascade do |t|
     t.string   "email",                  limit: 255, default: "", null: false
