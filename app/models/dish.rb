@@ -18,4 +18,6 @@
 class Dish < ActiveRecord::Base
   has_many :reviews, dependent: :destroy
   belongs_to :creator, polymorphic: true, dependent: :destroy
+
+  validates :creator, :name, presence: true
 end
