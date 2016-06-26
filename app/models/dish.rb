@@ -16,5 +16,5 @@
 #
 
 class Dish < ActiveRecord::Base
-  belongs_to :creator
+  belongs_to :creator, polymorphic: true, dependent: :destroy
 end
