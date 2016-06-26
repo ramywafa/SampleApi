@@ -9,6 +9,7 @@
 #  creator_type :string(255)
 #  created_at   :datetime         not null
 #  updated_at   :datetime         not null
+#  description  :text(65535)
 #
 # Indexes
 #
@@ -20,4 +21,5 @@ class Dish < ActiveRecord::Base
   belongs_to :creator, polymorphic: true, dependent: :destroy
 
   validates :creator, :name, presence: true
+  validates :description, length: { minimum: 3 }
 end
