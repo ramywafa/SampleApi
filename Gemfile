@@ -13,7 +13,12 @@ gem 'rabl-rails'
 gem 'annotate'
 
 group :development, :test do
+  gem 'rspec-rails'
 	gem 'better_errors'
+  gem 'database_cleaner'
+  gem 'factory_girl_rails'
+  gem 'faker'
+  gem 'shoulda-matchers', '~> 3.1'
 	gem 'byebug'
 end
 
