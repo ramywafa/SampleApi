@@ -3,6 +3,21 @@ class Api::BaseController < ApplicationController
   # to skip protection from forgery added to application controller
   skip_before_action :verify_authenticity_token
 
+
+  #before_filter :check_auth
+
+
+  #def check_auth
+  #  authenticate_or_request_with_http_basic do |username,password|
+  #    byebug
+  #    resource = User.find_by_email(username)
+  #    if resource.valid_password?(password)
+  #      sign_in :user, resource
+  #    end
+  #  end
+  #end
+
+
   respond_to :json
 
   rescue_from Exception do |e|

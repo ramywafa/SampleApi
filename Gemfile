@@ -11,6 +11,7 @@ gem 'jbuilder', '~> 2.0'
 gem 'devise'
 gem 'rabl-rails'
 gem 'annotate'
+gem 'kaminari'
 
 group :development, :test do
   gem 'rspec-rails'
