@@ -7,6 +7,8 @@ Rails.application.routes.draw do
       devise_for :users, format: :json,
         controllers: { registrations: 'api/v1/users/registrations',
                        sessions: 'api/v1/sessions' }
+      resources :admins, only: :show
+      resources :users, only: :show
       resources :dishes, except: [:new, :edit] do
         resources :reviews, only: [:create, :index, :update, :destroy]
       end
