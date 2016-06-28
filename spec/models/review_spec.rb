@@ -13,13 +13,14 @@ describe Review, type: :model do
       "is too short (minimum is 2 characters)") }
     it { is_expected.to validate_length_of(:content).is_at_least(2) }
     it { is_expected.to validate_presence_of(:dish) }
-    it { is_expected.to validate_presence_of(:rating) }
-    it { is_expected.to validate_numericality_of(:rating).is_between(1, 5) }
+    it { is_expected.to validate_presence_of(:rating).with_message("is not a number") }
+    it { is_expected.to validate_numericality_of(:rating).is_less_than_or_equal_to(5) }
+    it { is_expected.to validate_numericality_of(:rating).is_greater_than_or_equal_to(1) }
     it { is_expected.to validate_presence_of(:reviewer) }
   end
 
   describe "ActiveRecord associations" do
-    it { is_expected.to belong_to(:creator) }
-    it { is_expected.to have_many(:reviews).dependent(:destroy) }
+    it { is_expected.to belong_to(:reviewer) }
+    it { is_expected.to belong_to(:dish) }
   end
 end
