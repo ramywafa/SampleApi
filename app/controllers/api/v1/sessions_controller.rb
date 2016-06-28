@@ -6,7 +6,7 @@ class Api::V1::SessionsController < Devise::SessionsController
 
   def create
     self.resource = resource_class.find_by_email(sign_in_params[:email])
-    if resource.valid_password?(sign_in_params[:password])
+    if resource.present? && resource.valid_password?(sign_in_params[:password])
       sign_in(resource_name, resource)
       respond_with(:api, resource)
     else
