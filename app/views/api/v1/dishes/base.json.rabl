@@ -1,0 +1,1 @@
+attributes :id, :created_at, :name, :description
