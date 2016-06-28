@@ -3,25 +3,13 @@ class Api::BaseController < ApplicationController
   # to skip protection from forgery added to application controller
   skip_before_action :verify_authenticity_token
 
-
-  #before_filter :check_auth
-
-
-  #def check_auth
-  #  authenticate_or_request_with_http_basic do |username,password|
-  #    byebug
-  #    resource = User.find_by_email(username)
-  #    if resource.valid_password?(password)
-  #      sign_in :user, resource
-  #    end
-  #  end
-  #end
+  # make sure a signed in user/admin can create not guests
+  before_action :authenticate_client!, only: [:create]
 
 
   respond_to :json
 
   rescue_from Exception do |e|
-
     case e
     when Unauthorized
       head :forbidden
@@ -34,10 +22,23 @@ class Api::BaseController < ApplicationController
     end
   end
 
-
   protected
 
   def page
     params[:page] || 1
+  end
+
+  def current_client
+    current_api_admin || current_api_user
+  end
+
+  def current_client_signed_in?
+    api_admin_signed_in? || api_user_signed_in?
+  end
+
+  def authenticate_client!
+    if !current_client_signed_in?
+      fail Unauthorized
+    end
   end
 end
