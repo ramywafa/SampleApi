@@ -84,7 +84,7 @@ RSpec.describe Api::V1::DishesController, type: :controller do
     end
   end
 
-  describe 'PATCH #update', focus: true do
+  describe 'PATCH #update' do
     shared_examples_for "Client" do
 
       context "with valid params" do
@@ -172,5 +172,82 @@ RSpec.describe Api::V1::DishesController, type: :controller do
   end
 
   describe 'DELETE #destroy' do
+    shared_examples_for "Client" do
+
+      context "with valid params" do
+        before :each do
+          @dish = create(:dish, creator: creator)
+          @dish_original_count = Dish.count
+          request.env['HTTP_AUTHORIZATION'] = ActionController::HttpAuthentication::Basic.
+              encode_credentials(resource.email, resource.password)
+          delete :destroy, id: @dish, format: :json
+        end
+
+        it "should assign @dish" do
+          expect(assigns(:dish)).to eq(@dish)
+        end
+
+        it "should change dish count" do
+          expect(Dish.count).to eq(@dish_original_count - 1)
+        end
+
+        it "should respond with ok" do
+          expect(response).to have_http_status(:ok)
+        end
+      end
+
+      context "with invalid params" do
+        before :each do
+          @dish = create(:dish, creator: creator)
+          @dish_original_count = Dish.count
+        end
+
+        it "shouldn't delete a dish when basic auth is not passed" do
+          expect {
+            delete :destroy, { id: @dish, format: :json }
+          }.not_to change(Dish, :count)
+        end
+
+        it "should respond with status unauthorized" do
+          delete :destroy, { id: @dish, format: :json }
+          expect(response).to have_http_status :unauthorized
+        end
+
+        it "should respond with not found when the given id is not found in the database" do
+          request.env['HTTP_AUTHORIZATION'] = ActionController::HttpAuthentication::Basic.
+              encode_credentials(resource.email, resource.password)
+          delete :destroy, { id: 5000, format: :json }
+          expect(response).to have_http_status(:not_found)
+        end
+      end
+    end
+
+    context "with admin" do
+      let(:resource) { create(:admin) }
+      let(:creator) { create(:user) }
+
+      it_behaves_like "Client"
+    end
+
+    context "with user" do
+      let(:resource) { create(:user) }
+      let(:creator) { resource }
+
+      it_behaves_like "Client"
+
+      describe "User can't delete a dish that wasn't created by him/her" do
+        before :each do
+          @dish = create(:dish, creator: create(:admin))
+          request.env['HTTP_AUTHORIZATION'] = ActionController::HttpAuthentication::Basic.
+              encode_credentials(resource.email, resource.password)
+        end
+
+        it "should not delete @dish" do
+          expect {
+            delete :destroy, { id: @dish, format: :json }
+          }.not_to change(Dish, :count)
+        end
+      end
+    end
   end
 end
