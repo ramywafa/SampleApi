@@ -21,7 +21,7 @@ RSpec.describe Api::V1::DishesController, type: :controller do
     end
   end
 
-  describe 'POST #create', focus: true do
+  describe 'POST #create' do
     shared_examples_for "Admin user" do
       context "with valid params" do
         before(:each) do
@@ -84,7 +84,65 @@ RSpec.describe Api::V1::DishesController, type: :controller do
     end
   end
 
-  describe 'PATCH #update' do
+  describe 'PATCH #update', focus: true do
+    context "with admin" do
+      let(:resource) { create(:admin) }
+      let(:creator) { create(:user) }
+
+      before :each do
+        @dish = create(:dish, name: "Chicken", description: "Some description", creator: creator)
+      end
+
+      context "with valid params" do
+        before :each do
+          request.env['HTTP_AUTHORIZATION'] = ActionController::HttpAuthentication::Basic.
+              encode_credentials(resource.email, resource.password)
+          patch :update, id: @dish, format: :json,
+              dish: { name: "Meat", description: "Other description" }
+        end
+
+        it "should assign @dish" do
+          expect(assigns(:dish)).to eq(@dish)
+        end
+
+        it "should change dish attributes" do
+          @dish.reload
+          expect(@dish.name).to eq('Meat')
+          expect(@dish.description).to eq('Other description')
+        end
+
+        it "should respond with ok" do
+          expect(response).to have_http_status(:ok)
+        end
+      end
+
+      context "with invalid params" do
+        it "shouldn't update a dish when basic auth is not passed" do
+          expect {
+            patch :update, { id: @dish, dish: attributes_for(:dish), format: :json }
+          }.not_to change(@dish, :name)
+          expect {
+            patch :update, { id: @dish, dish: attributes_for(:dish), format: :json }
+          }.not_to change(@dish, :description)
+        end
+
+        it "should respond with status unauthorized" do
+          patch :update, { id: @dish, dish: attributes_for(:dish), format: :json }
+          expect(response).to have_http_status :unauthorized
+        end
+
+        it "should respond with not found when the given id is not found in the database" do
+          request.env['HTTP_AUTHORIZATION'] = ActionController::HttpAuthentication::Basic.
+              encode_credentials(resource.email, resource.password)
+          patch :update, { id: 5000, dish: attributes_for(:dish), format: :json }
+          expect(response).to have_http_status(:not_found)
+        end
+      end
+    end
+
+    context "with user" do
+      let(:resource) { create(:user) }
+    end
   end
 
   describe 'DELETE #destroy' do
