@@ -85,16 +85,11 @@ RSpec.describe Api::V1::DishesController, type: :controller do
   end
 
   describe 'PATCH #update', focus: true do
-    context "with admin" do
-      let(:resource) { create(:admin) }
-      let(:creator) { create(:user) }
-
-      before :each do
-        @dish = create(:dish, name: "Chicken", description: "Some description", creator: creator)
-      end
+    shared_examples_for "Client" do
 
       context "with valid params" do
         before :each do
+          @dish = create(:dish, name: "Chicken", description: "Some description", creator: creator)
           request.env['HTTP_AUTHORIZATION'] = ActionController::HttpAuthentication::Basic.
               encode_credentials(resource.email, resource.password)
           patch :update, id: @dish, format: :json,
@@ -117,6 +112,10 @@ RSpec.describe Api::V1::DishesController, type: :controller do
       end
 
       context "with invalid params" do
+        before :each do
+          @dish = create(:dish, name: "Chicken", description: "Some description", creator: creator)
+        end
+
         it "shouldn't update a dish when basic auth is not passed" do
           expect {
             patch :update, { id: @dish, dish: attributes_for(:dish), format: :json }
@@ -140,8 +139,35 @@ RSpec.describe Api::V1::DishesController, type: :controller do
       end
     end
 
+    context "with admin" do
+      let(:resource) { create(:admin) }
+      let(:creator) { create(:user) }
+
+      it_behaves_like "Client"
+    end
+
     context "with user" do
       let(:resource) { create(:user) }
+      let(:creator) { resource }
+
+      it_behaves_like "Client"
+
+      describe "User can't update a dish that wasn't created by him/her" do
+        before :each do
+          @dish = create(:dish, creator: create(:admin), name: 'Chicken')
+          request.env['HTTP_AUTHORIZATION'] = ActionController::HttpAuthentication::Basic.
+              encode_credentials(resource.email, resource.password)
+        end
+
+        it "should not update the dish attributes" do
+          expect {
+            patch :update, { id: @dish, dish: attributes_for(:dish), format: :json }
+          }.not_to change(@dish, :name)
+          expect {
+            patch :update, { id: @dish, dish: attributes_for(:dish), format: :json }
+          }.not_to change(@dish, :description)
+        end
+      end
     end
   end
 
