@@ -9,8 +9,8 @@ Rails.application.routes.draw do
                        sessions: 'api/v1/sessions' }
       resources :admins, only: :show
       resources :users, only: :show
-      resources :dishes, except: [:new, :edit] do
-        resources :reviews, only: [:create, :index, :update, :destroy]
+      resources :dishes, only: [:index, :create, :show, :update, :destroy] do
+        resources :reviews, only: [:index, :create, :show, :update, :destroy]
       end
     end
   end
