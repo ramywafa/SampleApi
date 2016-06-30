@@ -10,7 +10,7 @@ class Api::V1::DishesController < Api::BaseController
     @dish = Dish.new dish_params
     @dish.creator = current_client
     @dish.save
-    respond_with @dish
+    respond_with @dish, status: :created
   end
 
   def show
