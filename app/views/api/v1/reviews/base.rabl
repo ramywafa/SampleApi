@@ -1,0 +1,1 @@
+attributes :dish_id, :created_at, :id, :content, :rating
