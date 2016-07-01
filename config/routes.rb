@@ -13,5 +13,9 @@ Rails.application.routes.draw do
     end
   end
 
+  resources :dishes, only: [:new, :show, :index, :edit] do
+    resources :reviews, only: [:new, :show, :index, :edit]
+  end
+
   root to: "home#show"
 end
