@@ -12,7 +12,8 @@ gem 'devise'
 gem 'rabl-rails'
 gem 'annotate'
 gem 'kaminari'
-gem 'rest_client'
+gem 'puma'
+gem 'rest-client'
 
 group :development, :test do
   gem 'rspec-rails'
