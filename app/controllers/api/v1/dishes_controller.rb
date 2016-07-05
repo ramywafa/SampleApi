@@ -18,7 +18,8 @@ class Api::V1::DishesController < Api::BaseController
   end
 
   def update
-    respond_with @dish.update(dish_params)
+    @dish.update(dish_params)
+    respond_with @dish.reload
   end
 
   def destroy

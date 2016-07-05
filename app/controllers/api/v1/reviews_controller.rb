@@ -19,7 +19,8 @@ class Api::V1::ReviewsController < Api::BaseController
   end
 
   def update
-    respond_with @review.update(review_params)
+    @review.update(review_params)
+    respond_with @review.reload
   end
 
   def destroy
