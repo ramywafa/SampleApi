@@ -1,1 +1,6 @@
-<h1>Hello World</h1>
+<%= page_header('Dashboard') %>
+
+<div class="row">
+  <%= dashboard_statistics_viewer('col-md-6', 'panel-primary', 'Dishes listed!', 'circle', Dish.count) %>
+  <%= dashboard_statistics_viewer('col-md-6', 'panel-green', 'Dish reviews', 'comments', Review.count) %>
+</div>

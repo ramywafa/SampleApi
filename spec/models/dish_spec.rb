@@ -1,13 +1,13 @@
 require 'rails_helper'
 
 describe Dish, type: :model do
-  
+
   it "has a valid factory" do
     expect(build(:dish)).to be_valid
   end
 
   let(:dish) { build(:dish) }
-  
+
   describe "ActiveModel validations" do
     it { is_expected.to validate_presence_of(:creator) }
     it { is_expected.to validate_presence_of(:description).with_message(
