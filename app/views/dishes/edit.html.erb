@@ -6,7 +6,7 @@
       Edit <%= @dish.name %>
     </div>
     <div class="panel-body">
-      <%= render partial: 'form', locals: { submit_text: 'Update' } %>
+      <%= render partial: 'form', locals: { submit_text: 'Update', url: api_dish_path(@dish) } %>
     </div>
   </div>
 </div>
