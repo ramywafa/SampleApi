@@ -40,7 +40,7 @@ private
   end
 
   def validate_current_client_is_admin_or_reviewer
-    if current_client.nil? || (current_api_user.present? && current_api_user != @review.reviewer)
+    if current_client.nil? || (current_user.present? && current_user != @review.reviewer)
       fail Unauthorized
     end
   end

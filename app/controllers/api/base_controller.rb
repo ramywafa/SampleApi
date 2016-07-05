@@ -47,11 +47,11 @@ class Api::BaseController < ApplicationController
   end
 
   def current_client
-    current_api_admin || current_api_user
+    current_admin || current_user
   end
 
   def current_client_signed_in?
-    api_admin_signed_in? || api_user_signed_in?
+    admin_signed_in? || user_signed_in?
   end
 
   def authenticate_client!

@@ -35,7 +35,7 @@ private
   end
 
   def validate_current_client_is_admin_or_creator
-    if current_client.nil? || (current_api_user.present? && current_api_user != @dish.creator)
+    if current_client.nil? || (current_user.present? && current_user != @dish.creator)
       fail Unauthorized
     end
   end
