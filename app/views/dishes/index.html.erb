@@ -1,8 +1,16 @@
 <%= page_header('Dishes') %>
 
 <div class="col-lg-12">
-  <div class="panel panel-green">
-    <div class="panel-heading">All dishes</div>
+  <div class="panel panel-default">
+    <div class="panel-heading">
+      All dishes
+      <div class="pull-right">
+        <%= link_to new_dish_path do %>
+          <i class="fa fa-plus-circle fa-fw"></i>
+          New Dish
+        <% end %>
+      </div>
+    </div>
     <div class="panel-body">
       <div class="table-responsive" id="dishes">
         <%= render 'dishes' %>
