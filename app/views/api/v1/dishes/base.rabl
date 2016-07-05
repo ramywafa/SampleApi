@@ -2,6 +2,8 @@ attributes :id, :created_at, :name, :description, :creator_type
 
 node(:reviews_count) { |dish| dish.reviews.count }
 
+node(:url) { |dish| dish_url(dish) }
+
 child(:reviews) do
   extends 'api/v1/reviews/base'
 end
