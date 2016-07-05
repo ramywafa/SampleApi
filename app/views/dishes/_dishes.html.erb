@@ -1,0 +1,42 @@
+<% if @dishes.empty? %>
+  <p>No dishes currently added</p>
+<% else %>
+  <table class="table table-striped table-bordered">
+    <thead>
+      <tr>
+        <th>#</th>
+        <th>Name</th>
+        <th>Description</th>
+        <th># reviews</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% @dishes.each do |dish| %>
+        <tr>
+          <td><%= dish.id %></td>
+          <td><%= dish.name %></td>
+          <td><%= dish.description %></td>
+          <td><%= dish.reviews.count %></td>
+          <td>
+            <div class="btn-group">
+              <button type="button" class="btn dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
+                Actions
+                <span class="caret"></span>
+                <span class="sr-only">Toggle Dropdown</span>
+              </button>
+              <ul class="dropdown-menu" role="menu">
+                <li><%= link_to 'Edit', edit_dish_path(dish) %></li>
+                <li><%= link_to 'Show details', dish_path(dish) %></li>
+                <% if !current_admin.collection? %>
+                  <li><%= link_to 'New GCP', new_admin_account_gcp_request_path(account) %></li>
+                <% end %>
+              </ul>
+            </div>
+          </td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+  <%= paginate @dishes %>
+<% end %>
