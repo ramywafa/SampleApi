@@ -8,6 +8,8 @@ class DishesController < ApplicationController
   end
 
   def show
+    response = RestClient.get("http://localhost:3000/api/dishes/#{params[:id]}")
+    @dish = JSON.parse(response.body)['dish']
   end
 
   def new
