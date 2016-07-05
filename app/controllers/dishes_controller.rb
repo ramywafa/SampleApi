@@ -1,5 +1,5 @@
 class DishesController < ApplicationController
-  before_action :load_dish, only: [:show, :edit]
+  before_action :load_dish, only: [:edit]
 
   def index
     page = params[:page] || 1
