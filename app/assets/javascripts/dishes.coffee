@@ -1,6 +1,18 @@
 $ ->
   new PureFormHandler '#dishform'
 
+  $(document).on 'click', '.delete', (e) ->
+    e.preventDefault()
+    successurl = $(@).data('successurl')
+    tocallurl = $(@).data('tocallurl')
+    $.ajax
+      url: tocallurl
+      type: 'DELETE'
+      contentType: 'application/json'
+      dataType: 'text'
+      success: (result) ->
+        window.location = successurl
+
 class PureFormHandler
   constructor: (selector) ->
     $(document).on 'ajax:success', "#{selector} form", @redirect_to_object
